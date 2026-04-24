@@ -32,7 +32,7 @@ FIN
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
-float calcul(char **T, int x);
+float calcul(char *T, int x, int a);
 void aff (float y);
 
 void aff (float y)
@@ -40,40 +40,46 @@ void aff (float y)
   printf("y = %f\n", y);
 }
 
-float calcul( char **T, int x)
+float calcul( char *T, int x, int a)
 {
-  int i=2, y=0;
-  while(T[1][i]!= '\0')
+  int i; float y=0;
+  if (a<6 || a>6)
   {
-    if (T[1][i]!='x' && T[1][i+2]=='^')
+    printf("Erreur de syntaxe , veuiller réessayer comme ceci: ");
+    printf("./calculer y=polynome_sans_espace pour x = 5");
+  }
+  i=2; 
+  while(T[i]!='\0')
+  {
+    if (T[i]!='x' && T[i+2]=='^')
     {
-      y += T[1][i]*pow(x,T[1][i+3]);
+      y += T[i] - '0'*pow(x,T[i+3] - '0');
       i+=5;
     }
-    else if (T[1][i]=='x' && T[1][i+1]=='^')
+    else if (T[i]=='x' && T[i+1]=='^')
     {
-      y += pow(x,T[1][i+2]);
+      y += pow(x,T[i+2] - '0');
       i+=4;
     }
-    else if (T[1][i]=='x' && T[1][i+1]!='^')
+    else if (T[i]=='x' && T[i+1]!='^')
     {
       y+=x;
       i+=2;
     }
-    else if (T[1][i]!='x' && T[1][i+1]!='x')
+    else if (T[i]!='x' && T[i+1]!='x')
     {
-      y+=T[1][i];
+      y+=T[i] - '0';
       i+=2;
     }
   }
   return (y);
 }
 
-int main(int argc, char *argv[])
+int main(int nbarg, char **par)
 {
   int x; float y;
-  x=atoi(argv[5]);
-  y=calcul(argv, x);
+  x=atoi(par[5]);
+  y=calcul(par[1], x, nbarg);
   aff(y);
   return (0);
 }
